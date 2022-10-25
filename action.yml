@@ -1,4 +1,4 @@
-name: 'Cache'
+name: 'xaamin/actions-cache'
 description: 'Cache artifacts like dependencies and build outputs to improve workflow execution time'
 author: 'Benjamín Martínez (Forked from actions/cache)'
 inputs:
