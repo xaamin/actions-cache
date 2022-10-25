@@ -2,6 +2,10 @@ name: 'xaamin/actions-cache'
 description: 'Cache artifacts like dependencies and build outputs to improve workflow execution time'
 author: 'Benjamín Martínez (Forked from actions/cache)'
 inputs:
+  save:
+    description: 'Save cache under conditions [ success | never | always ]'
+    required: false
+    default: 'success'
   path:
     description: 'A list of files, directories, and wildcard patterns to cache and restore'
     required: true
@@ -22,8 +26,8 @@ runs:
   main: 'dist/restore/index.js'
   post: 'dist/save/index.js'
   post-if: |
-    ((env.GHA_CACHE_SAVE == 'always') && (success() || failure())) ||
-    ((env.GHA_CACHE_SAVE != 'never') && success())
+    ((inputs.save == 'always') && (success() || failure())) ||
+    ((inputs.save != 'never') && success())
 branding:
   icon: 'archive'
   color: 'gray-dark'
