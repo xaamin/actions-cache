@@ -20,6 +20,7 @@ See ["Caching dependencies to speed up workflows"](https://docs.github.com/en/ac
 * Fixed the download stuck problem by introducing a timeout of 1 hour for cache downloads.
 * Fix zstd not working for windows on gnu tar in issues.
 * Allowing users to provide a custom timeout as input for aborting download of a cache segment using an environment variable `SEGMENT_DOWNLOAD_TIMEOUT_MINS`. Default is 60 minutes.
+* `GHA_CACHE_SAVE` - Controls when to save cache. By default, a new cache is created if the job completes successfully. If this variable is set to `always`, the cache is saved also on job failure. If set to `never`, the cache is never saved, i.e. realizing read-only cache.
 
 Refer [here](https://github.com/actions/cache/blob/v2/README.md) for previous versions
 
@@ -174,7 +175,7 @@ steps:
 
 
 ## Cache Version
-Cache version is unique for a combination of compression tool used for compression of cache (Gzip, Zstd, etc based on runner OS) and the path of directories being cached. If two caches have different versions, they are identified as unique cache entries. This also means that a cache created on `windows-latest` runner can't be restored on `ubuntu-latest` as cache `Version`s are different. 
+Cache version is unique for a combination of compression tool used for compression of cache (Gzip, Zstd, etc based on runner OS) and the path of directories being cached. If two caches have different versions, they are identified as unique cache entries. This also means that a cache created on `windows-latest` runner can't be restored on `ubuntu-latest` as cache `Version`s are different.
 
 Example: Below example will create 3 unique caches with same keys. Ubuntu and windows runners will use different compression technique and hence create two different caches. And `build-linux` will create two different caches as the `paths` are different.
 
@@ -233,7 +234,7 @@ Following are some of the known practices/workarounds which community has used t
 - [Improving cache restore performance on Windows/Using cross-os caching](./workarounds.md#improving-cache-restore-performance-on-windows-using-cross-os-caching)
 
 #### Windows environment variables
-Please note that Windows environment variables (like `%LocalAppData%`) will NOT be expanded by this action. Instead, prefer using `~` in your paths which will expand to HOME directory. For example, instead of `%LocalAppData%`, use `~\AppData\Local`. For a list of supported default environment variables, see [this](https://docs.github.com/en/actions/learn-github-actions/environment-variables) page. 
+Please note that Windows environment variables (like `%LocalAppData%`) will NOT be expanded by this action. Instead, prefer using `~` in your paths which will expand to HOME directory. For example, instead of `%LocalAppData%`, use `~\AppData\Local`. For a list of supported default environment variables, see [this](https://docs.github.com/en/actions/learn-github-actions/environment-variables) page.
 
 ## Contributing
 We would love for you to contribute to `actions/cache`, pull requests are welcome! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
