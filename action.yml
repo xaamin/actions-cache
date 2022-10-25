@@ -26,8 +26,8 @@ runs:
   main: 'dist/restore/index.js'
   post: 'dist/save/index.js'
   post-if: |
-    ((inputs.save == 'always') && (success() || failure())) ||
-    ((inputs.save != 'never') && success())
+    ((${{ inputs.save }} == 'always') && (success() || failure())) ||
+    ((${{ inputs.save }} != 'never') && success())
 branding:
   icon: 'archive'
   color: 'gray-dark'
