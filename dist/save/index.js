@@ -47297,15 +47297,22 @@ function run() {
                 return;
             }
             const state = utils.getCacheState();
+            const save = process.env.SAVE_CACHE || 'success';
             // Inputs are re-evaluted before the post action, so we want the original key used for restore
             const primaryKey = core.getState(constants_1.State.CachePrimaryKey);
             if (!primaryKey) {
                 utils.logWarning(`Error retrieving key from state.`);
                 return;
             }
+            core.info(`Cache save flag is "${save}".`);
             if (utils.isExactKeyMatch(primaryKey, state)) {
-                core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
-                return;
+                if (['always', 'update'].indexOf(save) === -1) {
+                    core.info(`Cache hit occurred on the primary key ${primaryKey}, not saving cache.`);
+                    return;
+                }
+                else {
+                    core.info(`Cache hit occurred on the primary key ${primaryKey}, updating the value. Save strategy "${save}" specified.`);
+                }
             }
             const cachePaths = utils.getInputAsArray(constants_1.Inputs.Path, {
                 required: true
