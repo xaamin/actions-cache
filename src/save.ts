@@ -25,7 +25,7 @@ async function run(): Promise<void> {
         }
 
         const state = utils.getCacheState();
-        const save = core.getInput(Inputs.Save, { required: false }) || 'success';
+        const save = process.env.SAVE_CACHE || 'success';
 
         // Inputs are re-evaluted before the post action, so we want the original key used for restore
         const primaryKey = core.getState(State.CachePrimaryKey);

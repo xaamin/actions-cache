@@ -5,7 +5,7 @@ inputs:
   save:
     description: 'Controls when to save cache. By default, a new cache is created if the job completes successfully [success | always | never | update]'
     default: 'success'
-    required: true
+    required: false
   path:
     description: 'A list of files, directories, and wildcard patterns to cache and restore'
     required: true
@@ -26,9 +26,9 @@ runs:
   main: 'dist/restore/index.js'
   post: 'dist/save/index.js'
   post-if: |
-    ((env.INPUT_SAVE == 'always') && (success() || failure())) ||
-    ((env.INPUT_SAVE == 'update') && success()) ||
-    ((env.INPUT_SAVE != 'never') && success())
+    ((env.SAVE_CACHE == 'always') && (success() || failure())) ||
+    ((env.SAVE_CACHE == 'update') && success()) ||
+    ((env.SAVE_CACHE != 'never') && success())
 branding:
   icon: 'archive'
   color: 'gray-dark'
