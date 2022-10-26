@@ -1,7 +1,6 @@
 export enum Inputs {
     Key = "key",
     Path = "path",
-    Save = "save",
     RestoreKeys = "restore-keys",
     UploadChunkSize = "upload-chunk-size"
 }

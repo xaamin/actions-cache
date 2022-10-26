@@ -2,10 +2,6 @@ name: 'xaamin/actions-cache'
 description: 'Cache artifacts like dependencies and build outputs to improve workflow execution time'
 author: 'Benjamín Martínez (Forked from actions/cache)'
 inputs:
-  save:
-    description: 'Controls when to save cache. By default, a new cache is created if the job completes successfully [success | always | never | update]'
-    default: 'success'
-    required: false
   path:
     description: 'A list of files, directories, and wildcard patterns to cache and restore'
     required: true
