@@ -24,13 +24,11 @@ outputs:
 runs:
   using: 'node16'
   main: 'dist/restore/index.js'
-  env:
-    X_SAVE_CACHE: ${{ inputs.save }}
   post: 'dist/save/index.js'
   post-if: |
-    ((env.X_SAVE_CACHE == 'always') && (success() || failure())) ||
-    ((env.X_SAVE_CACHE == 'update') && success()) ||
-    ((env.X_SAVE_CACHE != 'never') && success())
+    ((env.INPUT_SAVE == 'always') && (success() || failure())) ||
+    ((env.INPUT_SAVE == 'update') && success()) ||
+    ((env.INPUT_SAVE != 'never') && success())
 branding:
   icon: 'archive'
   color: 'gray-dark'
