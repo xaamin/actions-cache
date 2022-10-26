@@ -5,7 +5,7 @@ inputs:
   save:
     description: 'Controls when to save cache. By default, a new cache is created if the job completes successfully [success | always | never | update]'
     default: 'success'
-    required: false
+    required: true
   path:
     description: 'A list of files, directories, and wildcard patterns to cache and restore'
     required: true
