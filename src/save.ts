@@ -34,6 +34,10 @@ async function run(): Promise<void> {
             return;
         }
 
+        core.info(
+            `Cache save flag is "${save}".`
+        );
+
         if (utils.isExactKeyMatch(primaryKey, state)) {
             if (['always', 'update'].indexOf(save) === -1) {
                 core.info(
