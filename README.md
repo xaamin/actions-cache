@@ -20,7 +20,12 @@ See ["Caching dependencies to speed up workflows"](https://docs.github.com/en/ac
 * Fixed the download stuck problem by introducing a timeout of 1 hour for cache downloads.
 * Fix zstd not working for windows on gnu tar in issues.
 * Allowing users to provide a custom timeout as input for aborting download of a cache segment using an environment variable `SEGMENT_DOWNLOAD_TIMEOUT_MINS`. Default is 60 minutes.
-* `X_SAVE_CACHE` - Controls when to save cache. By default, a new cache is created if the job completes successfully. If this variable is set to `always`, the cache is saved also on job failure. If set to `never`, the cache is never saved, i.e. realizing read-only cache.
+* `save` input - Controls when to save cache. By default, a new cache is created if the job completes successfully. Available values
+  - `always`, the cache is saved also on job failure.
+  - `never`, the cache is never saved, i.e. realizing read-only cache.
+  - `update`, the cache is saved or updated if the cache key already exists
+  - No value saves the cache only on success
+
 
 Refer [here](https://github.com/actions/cache/blob/v2/README.md) for previous versions
 
@@ -37,6 +42,11 @@ If you are using this inside a container, a POSIX-compliant `tar` needs to be in
 * `key` - An explicit key for restoring and saving the cache
 * `restore-keys` - An ordered list of prefix-matched keys to use for restoring stale cache if no cache hit occurred for key. Note
 `cache-hit` returns false in this case.
+* `save`- Controls when to save cache. By default, a new cache is created if the job completes successfully. Available values
+  - `always`, the cache is saved also on job failure.
+  - `never`, the cache is never saved, i.e. realizing read-only cache.
+  - `update`, the cache is saved or updated if the cache key already exists
+  - No value saves the cache only on success
 
 #### Environment Variables
 * `SEGMENT_DOWNLOAD_TIMEOUT_MINS` - Segment download timeout (in minutes, default `60`) to abort download of the segment if not completed in the defined number of minutes. [Read more](#cache-segment-restore-timeout)

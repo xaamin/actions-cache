@@ -2,6 +2,10 @@ name: 'xaamin/actions-cache'
 description: 'Cache artifacts like dependencies and build outputs to improve workflow execution time'
 author: 'Benjamín Martínez (Forked from actions/cache)'
 inputs:
+  save:
+    description: 'Controls when to save cache. By default, a new cache is created if the job completes successfully [success | always | never | update]'
+    default: 'success'
+    required: false
   path:
     description: 'A list of files, directories, and wildcard patterns to cache and restore'
     required: true
@@ -20,9 +24,12 @@ outputs:
 runs:
   using: 'node16'
   main: 'dist/restore/index.js'
+  env:
+    X_SAVE_CACHE: ${{ inputs.save }}
   post: 'dist/save/index.js'
   post-if: |
     ((env.X_SAVE_CACHE == 'always') && (success() || failure())) ||
+    ((env.X_SAVE_CACHE == 'update') && success()) ||
     ((env.X_SAVE_CACHE != 'never') && success())
 branding:
   icon: 'archive'
