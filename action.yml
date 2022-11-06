@@ -23,7 +23,7 @@ runs:
   post: 'dist/save/index.js'
   post-if: |
     ((env.SAVE_CACHE == 'always') && (success() || failure())) ||
-    ((env.SAVE_CACHE == 'update') && success()) ||
+    ((env.SAVE_CACHE == 'failure') && failure()) ||
     ((env.SAVE_CACHE != 'never') && success())
 branding:
   icon: 'archive'
