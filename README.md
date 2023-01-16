@@ -21,9 +21,10 @@ See ["Caching dependencies to speed up workflows"](https://docs.github.com/en/ac
 * Fix zstd not working for windows on gnu tar in issues.
 * Allowing users to provide a custom timeout as input for aborting download of a cache segment using an environment variable `SEGMENT_DOWNLOAD_TIMEOUT_MINS`. Default is 60 minutes.
 * `SAVE_CACHE` env - Controls when to save cache. By default, a new cache is created if the job completes successfully. Available values
+  - `success`, the cache is saved on success.
   - `always`, the cache is saved also on job failure.
   - `never`, the cache is never saved, i.e. realizing read-only cache.
-  - `update`, the cache is saved or updated if the cache key already exists
+  - `failure`, the cache is saved also on failure.
   - No value saves the cache only on success
 
 
