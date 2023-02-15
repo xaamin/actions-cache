@@ -1,4 +1,4 @@
-name: 'Cache'
+name: 'xaamin/actions-cache'
 description: 'Cache artifacts like dependencies and build outputs to improve workflow execution time'
 author: 'GitHub'
 inputs:
@@ -29,7 +29,10 @@ runs:
   using: 'node16'
   main: 'dist/restore/index.js'
   post: 'dist/save/index.js'
-  post-if: success()
+  post-if: |
+    (env.SAVE_CACHE == 'always' && (success() || failure()))
+    || (env.SAVE_CACHE == 'failure' && failure())
+    || (env.SAVE_CACHE != 'never' && success())
 branding:
   icon: 'archive'
   color: 'gray-dark'

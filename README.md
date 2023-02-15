@@ -46,11 +46,18 @@ If you are using a `self-hosted` Windows runner, `GNU tar` and `zstd` are requir
 
 ### Inputs
 
-* `key` - An explicit key for a cache entry. See [creating a cache key](#creating-a-cache-key).
+* `key` - An explicit key for restoring and saving the cache
 * `path` - A list of files, directories, and wildcard patterns to cache and restore. See [`@actions/glob`](https://github.com/actions/toolkit/tree/main/packages/glob) for supported patterns.
-* `restore-keys` - An ordered list of prefix-matched keys to use for restoring stale cache if no cache hit occurred for key.
+* `restore-keys` - An ordered list of prefix-matched keys to use for restoring stale cache if no cache hit occurred for key. Note
+`cache-hit` returns false in this case.
 * `enableCrossOsArchive` - An optional boolean when enabled, allows Windows runners to save or restore caches that can be restored or saved respectively on other platforms. Default: `false`
 * `fail-on-cache-miss` - Fail the workflow if cache entry is not found. Default: `false`
+* `SAVE_CACHE` env - Controls when to save cache. By default, a new cache is created if the job completes successfully. Available values
+  - `success`, the cache is saved on success.
+  - `always`, the cache is saved also on job failure.
+  - `never`, the cache is never saved, i.e. realizing read-only cache.
+  - `failure`, the cache is saved also on failure.
+  - No value saves the cache only on success
 
 #### Environment Variables
 
@@ -88,7 +95,9 @@ jobs:
 
     - name: Cache Primes
       id: cache-primes
-      uses: actions/cache@v3
+      uses: xaamin/actions-cache@v3
+      env:
+        SAVE_CACHE: failure
       with:
         path: prime-numbers
         key: ${{ runner.os }}-primes
@@ -101,7 +110,7 @@ jobs:
       run: /primes.sh -d prime-numbers
 ```
 
-The `cache` action provides a `cache-hit` output which is set to `true` when the cache is restored using the primary `key` and `false` when the cache is restored using `restore-keys` or no cache is restored.
+> Note: You must use the `cache` action in your workflow before you need to use the files that might be restored from the cache. If the provided `key` matches an existing cache, a new cache is not created and if the provided `key` doesn't match an existing cache, a new cache is automatically created provided the job completes successfully.
 
 #### Using a combination of restore and save actions
 
@@ -184,7 +193,7 @@ A cache key can include any of the contexts, functions, literals, and operators 
 For example, using the [`hashFiles`](https://docs.github.com/en/actions/learn-github-actions/expressions#hashfiles) function allows you to create a new cache when dependencies change.
 
 ```yaml
-  - uses: actions/cache@v3
+  - uses: xaamin/actions-cache@v3
     with:
       path: |
         path/to/dependencies
@@ -202,7 +211,7 @@ Additionally, you can use arbitrary command output in a cache key, such as a dat
       echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
     shell: bash
 
-  - uses: actions/cache@v3
+  - uses: xaamin/actions-cache@v3
     with:
       path: path/to/dependencies
       key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('**/lockfiles') }}
@@ -224,7 +233,7 @@ Example:
 steps:
   - uses: actions/checkout@v3
 
-  - uses: actions/cache@v3
+  - uses: xaamin/actions-cache@v3
     id: cache
     with:
       path: path/to/dependencies
@@ -256,7 +265,7 @@ jobs:
 
       - name: Cache Primes
         id: cache-primes
-        uses: actions/cache@v3
+        uses: xaamin/actions-cache@v3
         with:
           path: prime-numbers
           key: primes
@@ -267,7 +276,7 @@ jobs:
 
       - name: Cache Numbers
         id: cache-numbers
-        uses: actions/cache@v3
+        uses: xaamin/actions-cache@v3
         with:
           path: numbers
           key: primes
@@ -283,7 +292,7 @@ jobs:
 
       - name: Cache Primes
         id: cache-primes
-        uses: actions/cache@v3
+        uses: xaamin/actions-cache@v3
         with:
           path: prime-numbers
           key: primes
